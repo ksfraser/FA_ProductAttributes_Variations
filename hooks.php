@@ -70,8 +70,8 @@ class hooks_FA_ProductAttributes_Variations extends hooks
         $hooks->add_hook('fa_product_attributes_assignments_buttons', [$this, 'add_variations_buttons'], 10);
         $hooks->add_hook('fa_product_attributes_assignments_after_table', [$this, 'add_variations_content'], 10);
 
-        // Register hook for plugin action delegation
-        $hooks->add_hook('fa_product_attributes_plugin_action', [$this, 'handlePluginAction'], 10);
+        // Register hook for handling actions in admin interface
+        $hooks->add_hook('fa_product_attributes_handle_action', [$this, 'handleAdminAction'], 10);
     }
 
     /**
@@ -174,39 +174,47 @@ class hooks_FA_ProductAttributes_Variations extends hooks
     }
 
     /**
-     * Handle plugin actions delegated from core module
+     * Handle admin actions for the variations plugin
      */
-    public function handlePluginAction(string $action, array $postData): ?string
+    public function handleAdminAction(string $action, array $requestData): ?string
     {
-        try {
-            $service = $this->getVariationsService();
+        // Handle plugin-specific actions
+        $pluginActions = ['generate_variations', 'create_child', 'update_product_types'];
 
-            switch ($action) {
-                case 'generate_variations':
-                    $handler = new \Ksfraser\FA_ProductAttributes_Variations\Actions\GenerateVariationsAction(
-                        $service->getDao(),
-                        $service->getDbAdapter()
-                    );
-                    return $handler->handle($postData);
+        if (in_array($action, $pluginActions)) {
+            try {
+                $service = $this->getVariationsService();
 
-                case 'create_child':
-                    $handler = new \Ksfraser\FA_ProductAttributes_Variations\Actions\CreateChildAction(
-                        $service->getDao()
-                    );
-                    return $handler->handle($postData);
+                switch ($action) {
+                    case 'generate_variations':
+                        $handler = new \Ksfraser\FA_ProductAttributes_Variations\Actions\GenerateVariationsAction(
+                            $service->getDao(),
+                            $service->getDbAdapter()
+                        );
+                        return $handler->handle($requestData);
 
-                case 'update_product_types':
-                    $handler = new \Ksfraser\FA_ProductAttributes_Variations\Actions\UpdateProductTypesAction(
-                        $service->getDao()
-                    );
-                    return $handler->handle($postData);
+                    case 'create_child':
+                        $handler = new \Ksfraser\FA_ProductAttributes_Variations\Actions\CreateChildAction(
+                            $service->getDao()
+                        );
+                        return $handler->handle($requestData);
 
-                default:
-                    return null;
+                    case 'update_product_types':
+                        $handler = new \Ksfraser\FA_ProductAttributes_Variations\Actions\UpdateProductTypesAction(
+                            $service->getDao()
+                        );
+                        return $handler->handle($requestData);
+
+                    default:
+                        return null;
+                }
+            } catch (\Exception $e) {
+                return "Error handling plugin action '$action': " . $e->getMessage();
             }
-        } catch (\Exception $e) {
-            return "Error handling plugin action '$action': " . $e->getMessage();
         }
+
+        // Return null to let core handle other actions
+        return null;
     }
 
     /**
