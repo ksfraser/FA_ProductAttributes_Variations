@@ -10,6 +10,13 @@ This plugin extends the core FA_ProductAttributes module to provide:
 - **Parent-Child Relationships**: Support for product variations with parent-child relationships
 - **Product Type Management**: Manual management of product types (Simple, Variable, Variation)
 - **Variation Generation**: Create child products from parent products with attribute combinations
+- **Retroactive Analysis**: Scan existing products for variation patterns and suggest relationships
+
+## Recent Changes
+
+- **Service Migration**: RetroactiveApplicationService moved from core module to this plugin
+- **Clean Architecture**: All variation-specific functionality consolidated in plugin
+- **Hook Integration**: Uses core extension points for seamless integration
 
 ## Requirements
 

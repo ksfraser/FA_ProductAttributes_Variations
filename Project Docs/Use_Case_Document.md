@@ -1,4 +1,12 @@
-# Use Case Document
+# Use Case Document - FA_ProductAttributes_Variations Plugin
+
+## Overview
+This document describes use cases specific to the FA_ProductAttributes_Variations plugin, which extends the core FA_ProductAttributes module with WooCommerce-style product variations functionality.
+
+## Plugin Dependencies
+- FA_ProductAttributes core module must be installed and active
+- Attribute categories and values must be defined in core module
+- Products must have attributes assigned through core functionality
 
 ## Use Case: Create Product Variations for New Product Line
 
@@ -6,42 +14,88 @@
 - Product Manager (Primary Actor)
 
 ### Preconditions
-- Product Manager has access to FrontAccounting.
-- Master product is created in FA (parent flag = true).
-- Attribute categories and values are defined (or will be created).
+- FA_ProductAttributes_Variations plugin is installed and active
+- Master product exists in FA with attributes assigned via core module
+- Product is designated as a parent/variable product
 
 ### Main Flow
-1. Product Manager navigates to the Items screen for the master product.
-2. On the "Product Attributes" TAB, selects applicable categories (e.g., Size, Color).
-3. If categories don't exist, accesses the admin screen (Inventory > Stock > Product Attributes) to create them:
-   - Views sortable table of categories (sort by Name or Royal Order).
-   - Edits Royal Order values inline or via form.
-   - Creates category "Size" with Royal Order 1, values "Small (S)", "Medium (M)", "Large (L)".
-   - Creates category "Color" with Royal Order 2, values "Red (RED)", "Blue (BLU)".
-4. Returns to the product TAB and attaches categories to the master product.
-5. Selects specific values for each category to define variations (e.g., all combinations: S-RED, S-BLU, M-RED, etc.).
-6. Clicks "Create Variations" button, with option to check "Copy Sales Pricing" to inherit prices from the master product.
-7. System generates child products:
-   - Uses "Royal Order of adjectives" for attribute ordering (based on category Royal Order values, e.g., Size=1 before Color=2).
-   - Stock_id: Parent stock_id + attribute abbreviations in order (e.g., XYZ-L-RED).
-   - Short description: Replace ${ATTRIB_CLASS} placeholders in parent description with long attribute names (e.g., if parent has "Coat - ${Size} ${Color}", variation becomes "Coat - Large Red").
-   - If "Copy Sales Pricing" checked, copies all sales prices from master to each variation.
-8. Each child product inherits base details from master but has unique stock_id and description, with parent flag set to false.
-9. System confirms creation and lists generated variations.
-10. Users can manually deactivate any unwanted variations using FA's standard product deactivation features.
+1. Product Manager navigates to Inventory > Items and selects the master product.
+2. On the "Product Attributes" TAB (extended by plugin), views assigned attributes.
+3. Clicks "Create Variations" button to generate all possible combinations.
+4. System uses VariationService to generate combinations using Royal Order sequencing.
+5. FrontAccountingVariationService creates child products in FA database.
+6. Each variation gets unique stock_id (parent + attribute abbreviations).
+7. Description templates are applied with attribute value substitution.
+8. Pricing is optionally copied from parent to variations.
+9. System confirms creation and displays generated variations table.
 
 ### Postconditions
-- Child products are created and available in FA inventory.
-- Master product remains unchanged.
+- Child variation products are created and linked to parent.
+- Parent-child relationships are established in database.
+- Variations are available as individual products in FA inventory.
 
 ### Alternative Flows
-- If category already exists: Skip creation step.
-- If no values selected: Display error "Select at least one value per category".
-- If stock_id conflict: Append unique suffix (e.g., XYZ-L-RED-1).
+- Selective generation: Choose specific combinations instead of all possible.
+- Template customization: Modify description templates before generation.
+- Pricing options: Copy pricing, set custom pricing, or no pricing.
 
-### Exceptions
-- Insufficient permissions: Deny access.
-- DB error: Rollback and notify user.
+## Use Case: Retroactive Pattern Analysis
+
+### Actors
+- System Administrator (Primary Actor)
+
+### Preconditions
+- Existing products in FA inventory with potential variation patterns
+- FA_ProductAttributes_Variations plugin active
+- Attribute categories defined in core module
+
+### Main Flow
+1. Administrator accesses retroactive analysis functionality.
+2. RetroactiveApplicationService scans all stock_ids for variation patterns.
+3. System identifies potential parent-child relationships based on naming patterns.
+4. Analyzes attribute consistency across potential variation groups.
+5. Calculates confidence scores for each suggested relationship.
+6. Presents suggestions with confidence levels and proposed attribute assignments.
+7. Administrator reviews and approves suggestions.
+8. System applies approved relationships and creates attribute assignments.
+
+### Postconditions
+- Existing products are organized into parent-child variation relationships.
+- Attribute assignments are created based on pattern analysis.
+- Product catalog is retroactively structured for variations.
+
+### Alternative Flows
+- Manual review: Administrator can modify suggested relationships.
+- Partial application: Apply only high-confidence suggestions.
+- Category matching: System attempts to match patterns to existing attribute categories.
+
+## Use Case: Manage Variation Product Relationships
+
+### Actors
+- Product Manager (Primary Actor)
+
+### Preconditions
+- Variation products exist with parent-child relationships
+- Plugin is active and relationships are established
+
+### Main Flow
+1. Product Manager selects a parent product in Items screen.
+2. Views extended attributes tab showing variation management options.
+3. Sees table of all child variations with their attributes and status.
+4. Can activate/deactivate individual variations or entire families.
+5. Can create missing variations if new attributes are added.
+6. Can reassign variations to different parents if needed.
+7. Can view and edit variation-specific properties.
+
+### Postconditions
+- Variation relationships are maintained and up-to-date.
+- Product catalog reflects current variation structure.
+- Individual variations can be managed independently.
+
+### Alternative Flows
+- Bulk operations: Activate/deactivate multiple variations at once.
+- Relationship changes: Move variations between parent products.
+- Status monitoring: View stock levels and sales data for variations.
 
 ## Use Case: Add New Attribute to Existing Product Line and Generate Variations
 

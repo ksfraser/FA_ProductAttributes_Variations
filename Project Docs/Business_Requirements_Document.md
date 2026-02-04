@@ -1,18 +1,43 @@
-# Business Requirements Document (BRD)
+# Business Requirements Document (BRD) - FA_ProductAttributes_Variations Plugin
 
 ## Overview
-The module will extend FrontAccounting to support product attributes and variations, enabling users to associate attributes with products, create variation products via cloning, and manage attribute categories and values through an admin interface.
+The FA_ProductAttributes_Variations plugin extends the core FA_ProductAttributes module to provide WooCommerce-style product variations functionality. This plugin adds parent-child product relationships, automatic variation generation, and retroactive pattern analysis for existing products.
 
 ## Business Objectives
-- Enhance product management in FrontAccounting by adding attribute support.
-- Enable creation of product variations to handle complex inventory scenarios (e.g., different sizes/colors).
-- Provide administrative tools for maintaining attribute categories and values.
-- Ensure seamless integration with existing FA workflows.
+- Extend core attribute infrastructure with variation capabilities
+- Enable complex product management with parent-child relationships
+- Provide automatic variation generation from attribute combinations
+- Support retroactive analysis of existing products for variation patterns
+- Maintain clean plugin architecture with dependency on core module
 
 ## Stakeholders
-- Inventory Managers: Need to associate attributes and create variations.
-- Administrators: Manage attribute categories and values.
-- End Users: Interact with enhanced product screens.
+- Inventory Managers: Need to create and manage product variations
+- Product Catalog Managers: Handle complex products with multiple attributes
+- System Administrators: Manage plugin dependencies and installations
+- Core Module Users: Benefit from extended functionality without core modifications
+
+## Plugin Architecture
+
+### Dependency Requirements
+- **Required**: FA_ProductAttributes core module must be installed first
+- **Extension Points**: Uses core hook system for seamless integration
+- **Database Extensions**: Adds variation-specific tables while using core attribute tables
+
+### Extended Functionality
+**UI Extensions:**
+- Extends core attributes tab with variations-specific UI
+- Adds variation management buttons and controls
+- Provides parent-child relationship displays
+
+**Service Extensions:**
+- VariationService: Core variation business logic
+- FrontAccountingVariationService: FA-specific variation operations
+- RetroactiveApplicationService: Pattern analysis for existing products
+
+**Database Extensions:**
+- Leverages core attribute tables
+- Adds variation-specific relationship tracking
+- Maintains parent-child product hierarchies
 
 ## Functional Requirements
 

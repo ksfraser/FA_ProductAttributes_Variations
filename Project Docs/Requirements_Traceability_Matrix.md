@@ -1,8 +1,34 @@
-# Requirements Traceability Matrix (RTM)
+# Requirements Traceability Matrix (RTM) - FA_ProductAttributes_Variations Plugin
 
-| Requirement ID | Description | Business Need | Design Element | Test Case | Status |
-|----------------|-------------|---------------|----------------|-----------|--------|
-| BR1 | Add "Product Attributes" TAB to Items screen | Enhance product management | UI modification in items.php | TC1: Verify TAB appears | Pending |
+## Overview
+This Requirements Traceability Matrix tracks requirements specific to the FA_ProductAttributes_Variations plugin, which extends the core FA_ProductAttributes module with WooCommerce-style product variations functionality.
+
+## Plugin Dependencies
+- FA_ProductAttributes core module must be installed first
+- Attribute categories and values must be available from core
+- Hook extension system must be functional
+
+## Plugin Scope
+- Product variation generation and management
+- Parent-child relationship handling
+- Retroactive pattern analysis for existing products
+- Variation UI extensions to core attributes tab
+- Royal Order attribute sequencing in variations
+
+## Requirements Traceability
+
+| Requirement ID | Description | Business Need | Design Element | Test Case | Status | Component |
+|----------------|-------------|---------------|----------------|-----------|--------|-----------|
+| VAR-BR1 | Variation generation from attributes | Create product combinations | VariationService.generateCombinations() | VAR-TC1: Test combination generation | Completed | Variations |
+| VAR-BR2 | Parent-child product relationships | Maintain product hierarchies | Database parent_stock_id relationships | VAR-TC2: Test relationship tracking | Completed | Variations |
+| VAR-BR3 | Royal Order stock_id formatting | Consistent variation naming | Slug concatenation by Royal Order | VAR-TC3: Test stock_id format | Completed | Variations |
+| VAR-BR4 | Description template replacement | Dynamic variation descriptions | ${ATTRIB_CLASS} placeholder replacement | VAR-TC4: Test template replacement | Completed | Variations |
+| VAR-BR5 | Pricing inheritance options | Copy pricing from parent | Copy sales pricing checkbox | VAR-TC5: Test pricing copy | Completed | Variations |
+| VAR-BR6 | Retroactive pattern analysis | Organize existing products | RetroactiveApplicationService.scanForVariations() | VAR-TC6: Test pattern analysis | Completed | Variations |
+| VAR-BR7 | Variation UI extensions | Extended attributes tab | Hook-based UI additions | VAR-TC7: Test UI extensions | Completed | Variations |
+| VAR-BR8 | Parent product management | Activate/deactivate families | Bulk variation operations | VAR-TC8: Test family management | Completed | Variations |
+| VAR-BR9 | Missing variation creation | Fill gaps in combinations | Create missing variations logic | VAR-TC9: Test gap filling | Completed | Variations |
+| VAR-BR10 | FrontAccounting integration | FA-specific variation operations | FrontAccountingVariationService | VAR-TC10: Test FA integration | Completed | Variations |
 | BR1.1 | Display associated attributes | View current attributes | List component on TAB | TC2: Check attribute list loads | Pending |
 | BR1.2 | Add/remove attributes | Modify associations | Dropdown and save button | TC3: Test add/remove functionality | Pending |
 | BR1.3 | Show Create Variations button only for parents | Restrict to parent products | Parent flag check in UI | TC4: Test button visibility | Pending |

@@ -1,16 +1,29 @@
-# User Acceptance Testing (UAT) Test Cases
+# User Acceptance Testing (UAT) Test Cases - FA_ProductAttributes_Variations Plugin
 
 ## Overview
 
-This document provides comprehensive User Acceptance Testing scenarios for the FA_ProductAttributes module. These test cases are derived from the Use Case Document and Functional Requirements Specification, ensuring complete coverage of all user workflows and business requirements.
+This document provides comprehensive User Acceptance Testing scenarios for the FA_ProductAttributes_Variations plugin, which extends the core FA_ProductAttributes module with WooCommerce-style product variations functionality.
+
+## Plugin Testing Scope
+
+**Included in Variations Plugin UAT:**
+- Product variation generation and management
+- Parent-child relationship handling
+- Retroactive pattern analysis
+- Variation UI extensions
+- Royal Order attribute sequencing
+
+**Dependencies:**
+- FA_ProductAttributes core module must be installed and tested first
+- Attribute categories and values must be available from core module
 
 ## Test Case Structure
 
 Each test case includes:
-- **Test Case ID**: Unique identifier
+- **Test Case ID**: Unique identifier (prefixed with VAR-)
 - **Title**: Descriptive test name
 - **Priority**: Critical, High, Medium, Low
-- **Preconditions**: Required setup
+- **Preconditions**: Required setup (including core module)
 - **Test Steps**: Step-by-step instructions
 - **Expected Results**: What should happen
 - **Pass/Fail Criteria**: How to determine success
@@ -21,13 +34,14 @@ Each test case includes:
 
 ### Prerequisites
 - FrontAccounting 2.3.22 installed and running
-- FA_ProductAttributes module activated
+- FA_ProductAttributes core module activated and tested
+- FA_ProductAttributes_Variations plugin activated
 - Test user with admin permissions
-- Sample inventory data created
+- Sample inventory data with attributes assigned
 - Browser: Chrome/Firefox latest versions
 
 ### Test Data Setup
-Run the following SQL to create test data:
+Assuming core module test data exists, create additional variation-specific data:
 ```sql
 -- Insert test categories
 INSERT INTO product_attribute_categories (code, label, description, sort_order, active) VALUES

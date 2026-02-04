@@ -1,10 +1,37 @@
-# Technical Requirements
+# Technical Requirements - FA_ProductAttributes_Variations Plugin
 
 ## Platform and Environment
 
 - **FrontAccounting Version**: 2.3.22
 - **PHP Version**: 7.3
 - **Database**: MySQL (as used by FrontAccounting)
+- **Dependencies**: FA_ProductAttributes core module (required)
+
+## Plugin Architecture
+
+### Plugin Responsibilities
+The variations plugin extends the core FA_ProductAttributes module:
+
+- **Variation Services**: VariationService, FrontAccountingVariationService, RetroactiveApplicationService
+- **UI Extensions**: Extends core attributes tab with variation management UI
+- **Business Logic**: Parent-child relationship management, variation generation
+- **Database Extensions**: Uses core tables, adds variation-specific relationships
+
+### Extension Points Used
+- **attributes_tab_content**: Adds variation UI to core attributes tab
+- **attributes_save**: Handles variation-specific save operations
+- **product_type_management**: Extends product type functionality
+
+### Service Layer Architecture
+- **VariationService**: Core variation business logic (combinations, relationships)
+- **FrontAccountingVariationService**: FA-specific operations (product creation, pricing)
+- **RetroactiveApplicationService**: Pattern analysis for existing products
+- **Hook Integration**: Services integrate with core through extension system
+
+### Database Integration
+- **Core Tables Used**: product_attribute_*, stock_master relationships
+- **Extension Pattern**: Adds variation-specific data without modifying core schema
+- **Relationship Tracking**: Maintains parent-child product hierarchies
 
 ## Development Principles
 
@@ -54,18 +81,25 @@
 
 ## Architecture
 
-### Layered Architecture
-- **Presentation Layer**: UI components and controllers
-- **Business Logic Layer**: Domain services and validation
-- **Data Access Layer**: DAO classes extending ksf_ModulesDAO
-- **Infrastructure Layer**: External services (logging, file handling, etc.)
+### Plugin-Based Extension Architecture
+- **Core Dependency Layer**: Extends FA_ProductAttributes core module
+- **Service Layer**: Plugin-specific services (VariationService, FrontAccountingVariationService, RetroactiveApplicationService)
+- **UI Extension Layer**: Hook-based UI extensions to core attributes tab
+- **Business Logic Layer**: Variation-specific domain logic
+- **Data Access Layer**: Uses core DAO, extends with variation operations
 
 ### Key Components
-- **Validators**: Separate validation classes for different data types
-- **Processors**: SRP classes for CSV processing, price updates, etc.
-- **Factories**: For creating complex objects with dependencies
-- **Utility Classes**: RoyalOrderHelper for centralized Royal Order management
-- **Exceptions**: Custom exception hierarchy for error handling
+- **Variation Services**: Domain-specific services for variation management
+- **Hook Extensions**: Registered extensions to core hook points
+- **UI Components**: Extended UI for variation management
+- **Pattern Analysis**: RetroactiveApplicationService for existing product analysis
+- **Relationship Management**: Parent-child product hierarchy handling
+
+### Extension Mechanism
+- **Hook Registration**: Plugin registers extensions during activation
+- **Priority System**: Extensions execute in defined priority order
+- **Dependency Injection**: Services receive core dependencies
+- **Clean Separation**: Plugin logic isolated from core functionality
 
 ## User Acceptance Testing (UAT)
 
@@ -99,26 +133,35 @@
 
 ## Implementation Roadmap
 
-### Phase 1: Core Architecture
-- Define interfaces and abstract classes
-- Implement dependency injection container
-- Create base validator and processor classes
+### Phase 1: Plugin Foundation
+- Define plugin structure and namespace (Ksfraser\FA_ProductAttributes_Variations)
+- Set up composer.json with core module dependency
+- Create basic hook registration and activation logic
+- Establish PSR-4 autoloading structure
 
-### Phase 2: Business Logic
-- Implement CSV processing with SRP classes
-- Create validation pipeline
-- Develop DAO layer with transaction management
+### Phase 2: Core Service Development
+- Implement VariationService for variation business logic
+- Create FrontAccountingVariationService for FA integration
+- Develop RetroactiveApplicationService for pattern analysis
+- Build comprehensive unit tests for all services
 
-### Phase 3: UI Layer
-- Build controllers following MVC pattern
-- Implement form handling and validation
-- Create responsive UI components
+### Phase 3: UI Extension Development
+- Create hook extensions for core attributes tab
+- Implement variation management UI components
+- Develop parent-child relationship displays
+- Build admin interface extensions
 
-### Phase 4: Testing and QA
-- Write comprehensive unit tests using TDD (Red-Green-Refactor cycle)
-- Create integration tests
-- Develop UAT test scenarios
-- Generate UML diagrams
+### Phase 4: Integration and Testing
+- Test plugin loading and dependency resolution
+- Verify hook extension registration and execution
+- Create integration tests with core module
+- Develop end-to-end test scenarios
+
+### Phase 5: Documentation and Deployment
+- Update plugin-specific documentation
+- Create installation and configuration guides
+- Package for deployment with dependency checking
+- Final testing and validation
 
 ### Phase 5: Documentation and Deployment
 - Complete PHPDoc documentation

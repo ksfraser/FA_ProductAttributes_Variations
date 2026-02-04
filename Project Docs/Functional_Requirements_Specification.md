@@ -1,29 +1,60 @@
-# Functional Requirements Specification (FRS)
+# Functional Requirements Specification (FRS) - FA_ProductAttributes_Variations Plugin
 
 ## Introduction
-This document details the functional behavior of the Product Attributes module for FrontAccounting.
+This document details the functional behavior of the FA_ProductAttributes_Variations plugin, which extends the core FA_ProductAttributes module with WooCommerce-style product variations functionality.
+
+## Plugin Dependencies
+- **Core Module**: FA_ProductAttributes must be installed and active
+- **Hook System**: Uses fa-hooks for extension registration
+- **Database**: Extends core attribute schema with variation relationships
 
 ## Functional Requirements Details
 
-### FR1: Items Screen Enhancement
-- **Trigger**: User navigates to Inventory > Items and selects a product.
+### FR1: Variation UI Extensions
+- **Trigger**: User navigates to Inventory > Items and selects a product with the Product Attributes tab.
 - **Process**:
-  1. Display existing product details.
-  2. Add "Product Attributes" TAB.
-  3. Check if product is parent (parent flag = true); if yes, show TAB with:
-     - Table showing all child variations with their attributes
-     - "Create Variations", "Make Inactive", "Reactivate Variations", "Create Missing Variations" buttons
-  4. If not parent, show:
-     - "Assign Parent" dropdown with sanity check and force option
-     - Table showing parent-child relationships if applicable
-  5. "Make Inactive": Deactivate parent, default deactivate 0 stock variations, warn on stock >0.
-  6. "Reactivate Variations": Rebuild combinations, activate inactive, prompt for missing.
-  7. "Create Missing Variations": Generate missing combinations, create selected.
-  8. On TAB click, load associated attributes from DB.
-  9. Show list of attributes with add/remove options.
-  10. Allow assignment of categories to the product (similar to WooCommerce variable products).
-  11. Generate variations directly from the Items screen.
-- **Output**: Updated product with attributes saved and variations created.
+  1. Plugin extends core attributes tab with variations UI.
+  2. For parent products: Display variation management buttons.
+  3. For child products: Display parent relationship information.
+  4. Show variation table with attribute combinations.
+- **Output**: Extended UI providing variation management capabilities.
+
+### FR2: Variation Generation
+- **Trigger**: User on parent product clicks "Create Variations" in extended attributes tab.
+- **Process**:
+  1. Plugin's VariationService generates all possible attribute combinations.
+  2. FrontAccountingVariationService creates child products in FA database.
+  3. Apply Royal Order sorting for consistent attribute sequencing.
+  4. Generate stock IDs using parent + attribute pattern.
+  5. Copy pricing and other product details from parent.
+- **Output**: Child variation products created and linked to parent.
+
+### FR3: Retroactive Pattern Analysis
+- **Trigger**: User accesses retroactive analysis functionality.
+- **Process**:
+  1. RetroactiveApplicationService scans existing products for variation patterns.
+  2. Identify potential parent-child relationships based on stock ID patterns.
+  3. Analyze attribute consistency across potential variation groups.
+  4. Calculate confidence scores for suggested relationships.
+  5. Present suggestions for user review and application.
+- **Output**: Suggested parent-child relationships for existing products.
+
+### FR4: Parent-Child Relationship Management
+- **Trigger**: User manages products with parent-child relationships.
+- **Process**:
+  1. Display hierarchical product relationships.
+  2. Allow assignment of products to parent relationships.
+  3. Support activation/deactivation of variation families.
+  4. Maintain referential integrity across relationships.
+- **Output**: Consistent parent-child product hierarchies.
+
+### FR5: Product Type Management
+- **Trigger**: Products are classified and managed.
+- **Process**:
+  1. Extend core product types with variation-specific classifications.
+  2. Support Simple, Variable, and Variation product types.
+  3. Maintain type consistency across parent-child relationships.
+- **Output**: Proper product type classification and management.
 
 ### FR1.1: Product Relationship Table
 - **Trigger**: User views product lists or searches for products.
