@@ -65,6 +65,53 @@ class hooks_FA_ProductAttributes_Variations extends hooks
         $hooks->registerExtension('attributes_tab_content', 'product_attributes_variations', [$this, 'static_extend_attributes_tab'], 10);
         $hooks->registerExtension('attributes_save', 'product_attributes_variations', [$this, 'static_handle_variations_save'], 10);
         $hooks->registerExtension('attributes_delete', 'product_attributes_variations', [$this, 'static_handle_variations_delete'], 10);
+
+        // Register hooks for the assignments tab extensions
+        $hooks->add_hook('fa_product_attributes_assignments_buttons', [$this, 'add_variations_buttons'], 10);
+        $hooks->add_hook('fa_product_attributes_assignments_after_table', [$this, 'add_variations_content'], 10);
+
+        // Register hook for plugin action delegation
+        $hooks->add_hook('fa_product_attributes_plugin_action', [$this, 'handlePluginAction'], 10);
+    }
+
+    /**
+     * Hook callback to add variations buttons to the assignments tab
+     */
+    public function add_variations_buttons($params) {
+        $stock_id = $params['stock_id'] ?? '';
+
+        if (empty($stock_id)) {
+            return [];
+        }
+
+        // Return HTML for the Create Child Product button
+        return [
+            '<input type="submit" name="create_child" value="' . _("Create Child Product") . '" class="btn btn-default" />'
+        ];
+    }
+
+    /**
+     * Hook callback to add variations content after the assignments table
+     */
+    public function add_variations_content($params) {
+        $stock_id = $params['stock_id'] ?? '';
+
+        if (empty($stock_id)) {
+            return [];
+        }
+
+        // Return HTML for the Generate Variations form
+        $content = '<br />';
+        $content .= '<form method="post" action="">';
+        $content .= '<input type="hidden" name="action" value="generate_variations" />';
+        $content .= '<input type="hidden" name="tab" value="assignments" />';
+        $content .= '<input type="hidden" name="stock_id" value="' . htmlspecialchars($stock_id) . '" />';
+        $content .= '<div style="text-align: center;">';
+        $content .= '<input type="submit" name="generate" value="' . _("Generate Variations") . '" class="btn btn-default" />';
+        $content .= '</div>';
+        $content .= '</form>';
+
+        return [$content];
     }
 
     /**
@@ -124,5 +171,48 @@ class hooks_FA_ProductAttributes_Variations extends hooks
         $faVariationService = new \Ksfraser\FA_ProductAttributes_Variations\Service\FrontAccountingVariationService($dao, $db, $db);
 
         return $faVariationService;
+    }
+
+    /**
+     * Handle plugin actions delegated from core module
+     */
+    public function handlePluginAction(string $action, array $postData): ?string
+    {
+        try {
+            $service = $this->getVariationsService();
+
+            switch ($action) {
+                case 'generate_variations':
+                    $handler = new \Ksfraser\FA_ProductAttributes_Variations\Actions\GenerateVariationsAction(
+                        $service->getDao(),
+                        $service->getDbAdapter()
+                    );
+                    return $handler->handle($postData);
+
+                case 'create_child':
+                    $handler = new \Ksfraser\FA_ProductAttributes_Variations\Actions\CreateChildAction(
+                        $service->getDao()
+                    );
+                    return $handler->handle($postData);
+
+                case 'update_product_types':
+                    $handler = new \Ksfraser\FA_ProductAttributes_Variations\Actions\UpdateProductTypesAction(
+                        $service->getDao()
+                    );
+                    return $handler->handle($postData);
+
+                default:
+                    return null;
+            }
+        } catch (\Exception $e) {
+            return "Error handling plugin action '$action': " . $e->getMessage();
+        }
+    }
+
+    /**
+     * Get the VariationsService instance (non-static version)
+     */
+    private function getVariationsService() {
+        return self::static_get_variations_service();
     }
 }
