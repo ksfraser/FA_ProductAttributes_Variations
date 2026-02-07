@@ -54,6 +54,9 @@ class hooks_FA_ProductAttributes_Variations extends hooks
      * Called by the core module's plugin loader on every page load
      */
     function register_hooks() {
+        // Ensure our autoloader is loaded
+        self::ensure_autoloader_loaded();
+
         global $path_to_root;
 
         // Verify core module is available
@@ -87,6 +90,30 @@ class hooks_FA_ProductAttributes_Variations extends hooks
         // Register hooks for pricing rules and bulk operations
         $hooks->add_hook('fa_product_attributes_variations_pricing_rules_apply', [$this, 'applyPricingRules'], 10);
         $hooks->add_hook('fa_product_attributes_bulk_operations_register', [$this, 'registerBulkOperations'], 10);
+    }
+
+    /**
+     * Ensure the composer autoloader is loaded for this plugin
+     */
+    private static function ensure_autoloader_loaded() {
+        // Use __DIR__ to find the autoloader path relative to this hooks.php file
+        // autoloader is at: modules/FA_ProductAttributes_Variations/vendor/autoload.php
+        $autoloader = __DIR__ . '/vendor/autoload.php';
+
+        if (file_exists($autoloader)) {
+            require_once $autoloader;
+            // Debug: Check if autoloader was loaded
+            if (function_exists('spl_autoload_functions')) {
+                $functions = spl_autoload_functions();
+                if (is_array($functions) && count($functions) > 0) {
+                    error_log("FA_ProductAttributes_Variations: Autoloader loaded successfully from: " . $autoloader);
+                } else {
+                    error_log("FA_ProductAttributes_Variations: Autoloader loaded but no functions registered from: " . $autoloader);
+                }
+            }
+        } else {
+            error_log("FA_ProductAttributes_Variations: Autoloader not found at: " . $autoloader);
+        }
     }
 
     /**
