@@ -12,6 +12,9 @@
     "require": {
         "php": ">=7.3"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5.0"
+    },
     "autoload": {
         "psr-4": {
             "Ksfraser\\FA_ProductAttributes_Variations\\": "src/"
@@ -21,5 +24,8 @@
         "psr-4": {
             "Ksfraser\\FA_ProductAttributes_Variations\\Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }
