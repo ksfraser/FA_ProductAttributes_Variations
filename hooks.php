@@ -209,10 +209,11 @@ class hooks_FA_ProductAttributes_Variations extends hooks
 
         $db = new \Ksfraser\FA_ProductAttributes\Db\FrontAccountingDbAdapter();
         $dao = new \Ksfraser\FA_ProductAttributes\Dao\ProductAttributesDao($db);
+        $variationsDao = new \Ksfraser\FA_ProductAttributes_Variations\Dao\VariationsDao($db, $dao);
 
         // Create variations service
-        $variationService = new \Ksfraser\FA_ProductAttributes_Variations\Service\VariationService($dao, $db);
-        $faVariationService = new \Ksfraser\FA_ProductAttributes_Variations\Service\FrontAccountingVariationService($dao, $db, $db);
+        $variationService = new \Ksfraser\FA_ProductAttributes_Variations\Service\VariationService($variationsDao, $dao, $db);
+        $faVariationService = new \Ksfraser\FA_ProductAttributes_Variations\Service\FrontAccountingVariationService($variationsDao, $dao, $db, $db);
 
         return $faVariationService;
     }
