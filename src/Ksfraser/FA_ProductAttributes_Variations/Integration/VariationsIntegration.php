@@ -14,6 +14,11 @@ class VariationsIntegration
 
     public function __construct(FrontAccountingVariationService $service)
     {
+        // Defensive check: Ensure the core FA_ProductAttributes plugin is loaded
+        if (!class_exists('Ksfraser\FA_ProductAttributes\Dao\ProductAttributesDao')) {
+            throw new \RuntimeException('The FA_ProductAttributes core plugin must be loaded before the variations plugin can function.');
+        }
+
         $this->service = $service;
     }
 
