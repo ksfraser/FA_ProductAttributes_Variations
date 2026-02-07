@@ -184,6 +184,7 @@ class hooks_FA_ProductAttributes_Variations extends hooks
      * Render the variations sub-tab content
      */
     public static function render_variations_subtab($stock_id, $dao) {
+        display_notification("Debug: Rendering variations subtab for stock_id: $stock_id");
         $service = self::static_get_variations_service();
         $integration = new \Ksfraser\FA_ProductAttributes_Variations\Integration\VariationsIntegration($service);
         echo $integration->renderVariationsTab($stock_id);
@@ -214,6 +215,8 @@ class hooks_FA_ProductAttributes_Variations extends hooks
         // Create variations service
         $variationService = new \Ksfraser\FA_ProductAttributes_Variations\Service\VariationService($variationsDao, $dao, $db);
         $faVariationService = new \Ksfraser\FA_ProductAttributes_Variations\Service\FrontAccountingVariationService($variationsDao, $dao, $db, $db);
+
+        display_notification("Debug: Variations service created successfully");
 
         return $faVariationService;
     }
