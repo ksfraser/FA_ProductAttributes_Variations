@@ -4,10 +4,6 @@ $path_to_root = "../..";
 include_once($path_to_root . "/includes/session.inc");
 add_access_extensions();
 
-$use_date_picker = false;
-$js = "";
-if ($use_date_picker)
-    $js .= get_js_date_picker();
 include_once "$path_to_root/includes/ui.inc";
 
 page(_("Product Variations Administration"));
