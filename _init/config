@@ -8,4 +8,6 @@ Type: extension
 InstallPath: modules/FA_ProductAttributes_Variations
 Filename: FA_ProductAttributes_Variations
 Version: 1.0
+FA-Version: 2.4
+PHP-Version: 7.3
 Depends: FA_ProductAttributes_Core
