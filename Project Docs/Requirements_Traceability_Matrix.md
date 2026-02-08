@@ -1,34 +1,31 @@
 # Requirements Traceability Matrix (RTM) - FA_ProductAttributes_Variations Plugin
 
 ## Overview
-This Requirements Traceability Matrix tracks requirements specific to the FA_ProductAttributes_Variations plugin, which extends the core FA_ProductAttributes module with WooCommerce-style product variations functionality.
+This Requirements Traceability Matrix tracks requirements for the FA_ProductAttributes_Variations plugin, which provides WooCommerce-style product variations functionality. The plugin enables parent-child product relationships with automatic variation generation.
 
-## Plugin Dependencies
-- FA_ProductAttributes core module must be installed first
-- Attribute categories and values must be available from core
-- Hook extension system must be functional
-
-## Plugin Scope
-- Product variation generation and management
-- Parent-child relationship handling
+## Variations Plugin Scope
+- Parent product definition and variation generation
+- Variation-specific stock and pricing management
+- Bulk operations for variation management
 - Retroactive pattern analysis for existing products
-- Variation UI extensions to core attributes tab
-- Royal Order attribute sequencing in variations
+- Integration with FA's sales and inventory systems
+
+## Dependencies
+- Requires FA_ProductAttributes_Core module for base attribute functionality
+- Extends core attribute assignment system with variation logic
 
 ## Requirements Traceability
 
 | Requirement ID | Description | Business Need | Design Element | Test Case | Status | Component |
 |----------------|-------------|---------------|----------------|-----------|--------|-----------|
-| VAR-BR1 | Variation generation from attributes | Create product combinations | VariationService.generateCombinations() | VAR-TC1: Test combination generation | Completed | Variations |
-| VAR-BR2 | Parent-child product relationships | Maintain product hierarchies | Database parent_stock_id relationships | VAR-TC2: Test relationship tracking | Completed | Variations |
-| VAR-BR3 | Royal Order stock_id formatting | Consistent variation naming | Slug concatenation by Royal Order | VAR-TC3: Test stock_id format | Completed | Variations |
-| VAR-BR4 | Description template replacement | Dynamic variation descriptions | ${ATTRIB_CLASS} placeholder replacement | VAR-TC4: Test template replacement | Completed | Variations |
-| VAR-BR5 | Pricing inheritance options | Copy pricing from parent | Copy sales pricing checkbox | VAR-TC5: Test pricing copy | Completed | Variations |
-| VAR-BR6 | Retroactive pattern analysis | Organize existing products | RetroactiveApplicationService.scanForVariations() | VAR-TC6: Test pattern analysis | Completed | Variations |
-| VAR-BR7 | Variation UI extensions | Extended attributes tab | Hook-based UI additions | VAR-TC7: Test UI extensions | Completed | Variations |
-| VAR-BR8 | Parent product management | Activate/deactivate families | Bulk variation operations | VAR-TC8: Test family management | Completed | Variations |
-| VAR-BR9 | Missing variation creation | Fill gaps in combinations | Create missing variations logic | VAR-TC9: Test gap filling | Completed | Variations |
-| VAR-BR10 | FrontAccounting integration | FA-specific variation operations | FrontAccountingVariationService | VAR-TC10: Test FA integration | Completed | Variations |
+| VAR-BR1 | Parent product definition | Establish variation hierarchy | VariationService + DAO | VAR-TC1: Test parent designation | Completed | Variations |
+| VAR-BR2 | Automatic variation generation | Create all attribute combinations | GenerateVariationsAction | VAR-TC2: Test combination generation | Completed | Variations |
+| VAR-BR3 | Variation-specific pricing | Individual pricing per variation | Pricing rules in DAO | VAR-TC3: Test pricing application | Completed | Variations |
+| VAR-BR4 | Stock management per variation | Individual inventory tracking | Stock integration | VAR-TC4: Test stock operations | Completed | Variations |
+| VAR-BR5 | Bulk variation operations | Efficient mass updates | Bulk operations service | VAR-TC5: Test bulk operations | Completed | Variations |
+| VAR-BR6 | Retroactive pattern analysis | Convert existing products | RetroactiveApplicationService | VAR-TC6: Test pattern recognition | Completed | Variations |
+| VAR-BR7 | Sales integration | Proper variation handling in orders | FA sales hooks | VAR-TC7: Test sales integration | Completed | Variations |
+| VAR-BR8 | Parent-child relationships | Maintain referential integrity | Database constraints | VAR-TC8: Test relationship integrity | Completed | Variations |
 | BR1.1 | Display associated attributes | View current attributes | List component on TAB | TC2: Check attribute list loads | Pending |
 | BR1.2 | Add/remove attributes | Modify associations | Dropdown and save button | TC3: Test add/remove functionality | Pending |
 | BR1.3 | Show Create Variations button only for parents | Restrict to parent products | Parent flag check in UI | TC4: Test button visibility | Pending |
@@ -69,29 +66,34 @@ This Requirements Traceability Matrix tracks requirements specific to the FA_Pro
 | BR1.9 | WooCommerce-style Items screen integration | Assign categories and generate variations from Items screen | UI modifications to items.php | TC57: Test Items screen functionality | Completed |
 | BR1.10 | Direct variation generation from Items | Create variations without admin screen | Items screen TAB with generation logic | TC58: Test direct generation | Completed |
 
-| BR6 | Custom pricing per variation | Individual prices | Price update sub-screen | TC24: Test pricing | Pending |
-| BR6.1 | Integrate with FA_BulkPriceUpdate module | Use external bulk pricing if available | Check for module and call its function | TC25: Test integration | Pending |
-| BR7 | Reporting with attributes | Filtered reports | New/modified reports | TC26: Test reporting | Pending |
-| BR7.1 | Validation report for inactive parents | Identify inconsistencies | Report on 0-stock active variations | TC27: Test validation | Pending |
-| BR8 | Bulk operations | Edit multiple variations | Bulk edit UI | TC28: Test bulk edits | Pending |
-| BR9 | Retroactive application of module | Analyze existing products for relationships | Pattern scanning and suggestion logic | TC29: Test retroactive analysis | Pending |
-| BR9.1 | Scan stock_ids for variation patterns | Identify potential groups | Regex or string matching on stock_ids | TC30: Test pattern detection | Pending |
-| BR9.2 | Suggest parent creation for groups | Propose new parents | Logic to infer parent stock_id | TC31: Test parent suggestions | Pending |
-| BR9.3 | Suggest parent-child associations | Link existing products | Hierarchy detection | TC32: Test association suggestions | Pending |
-| BR9.4 | Bulk edit screen for assignments | Assign multiple at once | UI with checkboxes and assign button | TC33: Test bulk assignment | Pending |
-| BR9.5 | Sanity checks and force options | Validate assignments | Warning dialogs and confirmations | TC34: Test validation and force | Pending |
-| BR10 | API for external integration | REST endpoints for CRUD | External system access | TC35: Test API endpoints | Completed |
-| BR10.1 | Authentication and security | API key validation | Secure access | TC36: Test auth mechanisms | Completed |
-| NFR1 | Seamless integration | No disruption to FA | Hooks-based implementation | TC37: Test core FA unchanged | Pending |
-| NFR2 | Security | Authorized access with greyed UI | Permission checks | TC38: Test unauthorized access denied | Pending |
-| NFR3 | Performance | Efficient loading/saving | Optimized queries | TC39: Test load times | Pending |
-| NFR4 | Usability | Intuitive UI with tooltips/confirmations | User-friendly elements | TC40: User acceptance testing | Completed |
-| NFR5 | Data persistence | Extend DB schema with parent_stock_id | New tables in schema.sql | TC41: Verify DB schema | Completed |
-| NFR5.1 | Data integrity via Make Inactive | Prevent orphans | Deactivate with warnings | TC42: Test deactivation | Pending |
-| NFR6 | Compatibility | FA 2.3.22 and PHP 7.3 | Code compatibility | TC43: Test on specified versions | Pending |
-| NFR7 | Code Quality | SOLID principles, DI, SRP | Interfaces, traits, polymorphism, RoyalOrderHelper | TC44: Test adherence | Completed |
-| NFR8 | Testing | Unit tests for all code, edge cases | PHPUnit framework, 73 tests, 241 assertions | TC45: Test coverage metrics | Completed |
-| NFR9 | Documentation | PHPDoc, UML diagrams | ERD, Message Flow, flowcharts | TC46: Verify completeness | Pending |
+| BR6 | Variation-based pricing rules | Attribute value pricing adjustments | Fixed amount/percentage rules | TC24: Test pricing rules | Pending |
+| BR6.1 | Support fixed amount adjustments | $X pricing rules | Rule engine for dollar adjustments | TC25: Test fixed amount rules | Pending |
+| BR6.2 | Support percentage adjustments | Y% pricing rules | Rule engine for percentage adjustments | TC26: Test percentage rules | Pending |
+| BR6.3 | Support combined adjustments | $X + Y% pricing rules | Rule engine for combined adjustments | TC27: Test combined rules | Pending |
+| BR7 | Reporting with attributes | Filtered reports | New/modified reports | TC28: Test reporting | Pending |
+| BR7.1 | Validation report for inactive parents | Identify inconsistencies | Report on 0-stock active variations | TC29: Test validation | Pending |
+| BR8 | Bulk operations (Core Module) | Edit multiple variations | Bulk edit framework | TC30: Test bulk operations | Pending |
+| BR8.1 | Bulk pricing adjustments | Apply pricing rules to multiple products | Fixed/percentage/combined adjustments | TC31: Test bulk pricing | Pending |
+| BR8.2 | Bulk attribute operations | Apply attribute changes to multiple products | Category/value assignments | TC32: Test bulk attributes | Pending |
+| BR8.3 | Plugin extension for bulk operations | Domain-specific bulk rules | Plugin hooks for custom logic | TC33: Test plugin extensions | Pending |
+| BR9 | Retroactive application of module | Analyze existing products for relationships | Pattern scanning and suggestion logic | TC34: Test retroactive analysis | Pending |
+| BR9.1 | Scan stock_ids for variation patterns | Identify potential groups | Regex or string matching on stock_ids | TC35: Test pattern detection | Pending |
+| BR9.2 | Suggest parent creation for groups | Propose new parents | Logic to infer parent stock_id | TC36: Test parent suggestions | Pending |
+| BR9.3 | Suggest parent-child associations | Link existing products | Hierarchy detection | TC37: Test association suggestions | Pending |
+| BR9.4 | Bulk edit screen for assignments | Assign multiple at once | UI with checkboxes and assign button | TC38: Test bulk assignment | Pending |
+| BR9.5 | Sanity checks and force options | Validate assignments | Warning dialogs and confirmations | TC39: Test validation and force | Pending |
+| BR10 | API for external integration | REST endpoints for CRUD | External system access | TC40: Test API endpoints | Completed |
+| BR10.1 | Authentication and security | API key validation | Secure access | TC41: Test auth mechanisms | Completed |
+| NFR1 | Seamless integration | No disruption to FA | Hooks-based implementation | TC42: Test core FA unchanged | Pending |
+| NFR2 | Security | Authorized access with greyed UI | Permission checks | TC43: Test unauthorized access denied | Pending |
+| NFR3 | Performance | Efficient loading/saving | Optimized queries | TC44: Test load times | Pending |
+| NFR4 | Usability | Intuitive UI with tooltips/confirmations | User-friendly elements | TC45: User acceptance testing | Completed |
+| NFR5 | Data persistence | Extend DB schema with parent_stock_id | New tables in schema.sql | TC46: Verify DB schema | Completed |
+| NFR5.1 | Data integrity via Make Inactive | Prevent orphans | Deactivate with warnings | TC47: Test deactivation | Pending |
+| NFR6 | Compatibility | FA 2.3.22 and PHP 7.3 | Code compatibility | TC48: Test on specified versions | Pending |
+| NFR7 | Code Quality | SOLID principles, DI, SRP | Interfaces, traits, polymorphism, RoyalOrderHelper | TC49: Test adherence | Completed |
+| NFR8 | Testing | Unit tests for all code, edge cases | PHPUnit framework, 73 tests, 241 assertions | TC50: Test coverage metrics | Completed |
+| NFR9 | Documentation | PHPDoc, UML diagrams | ERD, Message Flow, flowcharts | TC51: Verify completeness | Pending |
 
 ## Notes
 - Requirement IDs correspond to sections in BRD.

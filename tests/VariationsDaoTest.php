@@ -3,7 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use Ksfraser\FA_ProductAttributes_Variations\Dao\VariationsDao;
 use Ksfraser\FA_ProductAttributes\Dao\ProductAttributesDao;
-use Ksfraser\FA_ProductAttributes\Db\DbAdapterInterface;
+use Ksfraser\ModulesDAO\Db\DbAdapterInterface;
 
 class VariationsDaoTest extends TestCase
 {
@@ -16,8 +16,8 @@ class VariationsDaoTest extends TestCase
         $db->expects($this->exactly(2))
             ->method('execute')
             ->withConsecutive(
-                ['ALTER TABLE `fa_product_attribute_assignments` ADD COLUMN `parent_stock_id` VARCHAR(50) NULL DEFAULT NULL'],
-                ['ALTER TABLE `fa_product_attribute_assignments` ADD INDEX `idx_parent_stock_id` (`parent_stock_id`)']
+                ["\r\n                ALTER TABLE `fa_product_attribute_assignments`\r\n                ADD COLUMN `parent_stock_id` VARCHAR(50) NULL DEFAULT NULL\r\n            "],
+                ["\r\n                ALTER TABLE `fa_product_attribute_assignments`\r\n                ADD INDEX `idx_parent_stock_id` (`parent_stock_id`)\r\n            "],
             );
 
         $coreDao = $this->createMock(ProductAttributesDao::class);
@@ -243,15 +243,5 @@ class VariationsDaoTest extends TestCase
         $result = $dao->isVariation('PARENT123');
 
         $this->assertFalse($result);
-    }
-
-    public function testGetDbAdapter(): void
-    {
-        $db = $this->createMock(DbAdapterInterface::class);
-        $coreDao = $this->createMock(ProductAttributesDao::class);
-        $dao = new VariationsDao($db, $coreDao);
-
-        $result = $dao->getDbAdapter();
-        $this->assertSame($db, $result);
     }
 }

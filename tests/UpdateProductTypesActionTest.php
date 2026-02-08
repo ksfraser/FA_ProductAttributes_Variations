@@ -16,7 +16,7 @@ class UpdateProductTypesActionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dao = $this->createMock(ProductAttributesDao::class);
+        $this->dao = $this->getMockBuilder(ProductAttributesDao::class)->disableOriginalConstructor()->onlyMethods(['getAllProducts', 'listCategoryAssignments'])->addMethods(['getProductParent', 'clearParentRelationship', 'setParentRelationship'])->getMock();
         $this->action = new UpdateProductTypesAction($this->dao);
     }
 

@@ -4,8 +4,273 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "760fdc73063626aff8b3c423036b849c",
-    "packages": [],
+    "content-hash": "0b1707df976a722c2bc957613f90b50d",
+    "packages": [
+        {
+            "name": "ksfraser/fa-hooks",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ksfraser/FA_Hooks.git",
+                "reference": "874d086deaa87ae2aaf8c63f37869c44e1ef9d3c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ksfraser/FA_Hooks/zipball/874d086deaa87ae2aaf8c63f37869c44e1ef9d3c",
+                "reference": "874d086deaa87ae2aaf8c63f37869c44e1ef9d3c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ksfraser\\FA_Hooks\\": "src/Ksfraser/FA_Hooks/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Fraser",
+                    "email": "kevin@ksfraser.com"
+                }
+            ],
+            "description": "Lightweight hook system for FrontAccounting module extensions",
+            "support": {
+                "issues": "https://github.com/ksfraser/FA_Hooks/issues",
+                "source": "https://github.com/ksfraser/FA_Hooks/tree/main"
+            },
+            "time": "2026-02-06T21:43:54+00:00"
+        },
+        {
+            "name": "ksfraser/fa-product-attributes",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "..",
+                "reference": "875971a0d2833b44a67fb670fd6192272eb3e491"
+            },
+            "require": {
+                "ksfraser/fa-hooks": "^1.0 || dev-main",
+                "ksfraser/ksf-modules-dao": "^0.3",
+                "ksfraser/ksf-rest-api": "*",
+                "ksfraser/ksf-schemamanager": "*",
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "nikic/php-parser": "^4.0",
+                "phpunit/phpunit": "^9.5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ksfraser\\FA_ProductAttributes\\": "src/Ksfraser/FA_ProductAttributes/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Ksfraser\\FA_ProductAttributes\\Test\\": "tests/",
+                    "Ksfraser\\FA_ProductAttributes_Variations\\Test\\": "../fa_product_attributes_variations/tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "KS Fraser"
+                }
+            ],
+            "description": "FrontAccounting-compatible ordered product attributes (royal order of adjectives)",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "ksfraser/famock",
+            "version": "0.2.0",
+            "dist": {
+                "type": "path",
+                "url": "../famock",
+                "reference": "e4976c110362ab12a3673a79025b2a0f6a357a67"
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ksfraser\\FAMock\\": "php/"
+                },
+                "files": [
+                    "php/FAMock.php"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Fraser",
+                    "email": "kevin@ksfraser.com"
+                }
+            ],
+            "description": "FrontAccounting function mocks for unit testing",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "ksfraser/ksf-modules-dao",
+            "version": "v0.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ksfraser/ksf_ModulesDAO.git",
+                "reference": "3c935e3654de56ca6db2105deb442c2481fd074b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ksfraser/ksf_ModulesDAO/zipball/3c935e3654de56ca6db2105deb442c2481fd074b",
+                "reference": "3c935e3654de56ca6db2105deb442c2481fd074b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ksfraser\\ModulesDAO\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Ksfraser\\ModulesDAO\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "KS Fraser"
+                }
+            ],
+            "description": "Cross-platform DAO abstraction (DB, WordPress, SuiteCRM, FrontAccounting, CSV, XML)",
+            "support": {
+                "source": "https://github.com/ksfraser/ksf_ModulesDAO/tree/v0.3.4",
+                "issues": "https://github.com/ksfraser/ksf_ModulesDAO/issues"
+            },
+            "time": "2026-02-06T23:58:40+00:00"
+        },
+        {
+            "name": "ksfraser/ksf-rest-api",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ksfraser/ksf_RestAPI.git",
+                "reference": "a6f3262833f3733ada1be6e9b041feb5bb890368"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ksfraser/ksf_RestAPI/zipball/a6f3262833f3733ada1be6e9b041feb5bb890368",
+                "reference": "a6f3262833f3733ada1be6e9b041feb5bb890368",
+                "shasum": ""
+            },
+            "require": {
+                "ksfraser/fa-product-attributes": "*",
+                "ksfraser/ksf-modules-dao": "^0.3",
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ksfraser\\Rest_API\\": "src/Ksfraser/Rest_API/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Fraser",
+                    "email": "kevin@ksfraser.com"
+                }
+            ],
+            "description": "REST API Library",
+            "support": {
+                "issues": "https://github.com/ksfraser/ksf_RestAPI/issues",
+                "source": "https://github.com/ksfraser/ksf_RestAPI/tree/main"
+            },
+            "time": "2026-02-07T22:08:23+00:00"
+        },
+        {
+            "name": "ksfraser/ksf-schemamanager",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ksfraser/ksf_SchemaManager.git",
+                "reference": "04d70f0e7fb3c7bb14be991b4bd0af139fa3ab3b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ksfraser/ksf_SchemaManager/zipball/04d70f0e7fb3c7bb14be991b4bd0af139fa3ab3b",
+                "reference": "04d70f0e7fb3c7bb14be991b4bd0af139fa3ab3b",
+                "shasum": ""
+            },
+            "require": {
+                "ksfraser/ksf-modules-dao": "^0.3",
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ksfraser\\SchemaManager\\": "src/Ksfraser/SchemaManager/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Fraser",
+                    "email": "kevin@ksfraser.com"
+                }
+            ],
+            "description": "Schema Management Library",
+            "support": {
+                "issues": "https://github.com/ksfraser/ksf_SchemaManager/issues",
+                "source": "https://github.com/ksfraser/ksf_SchemaManager/tree/main"
+            },
+            "time": "2026-02-07T22:07:42+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "doctrine/instantiator",
@@ -1805,9 +2070,9 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {},
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.3"

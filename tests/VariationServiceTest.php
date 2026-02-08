@@ -4,17 +4,19 @@ namespace Ksfraser\FA_ProductAttributes_Variations\Test\Service;
 
 use Ksfraser\FA_ProductAttributes_Variations\Service\VariationService;
 use Ksfraser\FA_ProductAttributes\Dao\ProductAttributesDao;
-use Ksfraser\FA_ProductAttributes\Db\DbAdapterInterface;
+use Ksfraser\FA_ProductAttributes_Variations\Dao\VariationsDao;
+use Ksfraser\ModulesDAO\Db\DbAdapterInterface;
 use PHPUnit\Framework\TestCase;
 
 class VariationServiceTest extends TestCase
 {
     public function testGenerateCombinationsEmpty(): void
     {
+        $variationsDao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
         $dao = $this->createMock(ProductAttributesDao::class);
         $db = $this->createMock(DbAdapterInterface::class);
         
-        $service = new VariationService($dao, $db);
+        $service = new VariationService($variationsDao, $dao, $db);
         
         $combinations = $this->invokePrivateMethod($service, 'generateCombinations', [[]]);
         
@@ -23,10 +25,11 @@ class VariationServiceTest extends TestCase
 
     public function testGenerateCombinationsSingleCategory(): void
     {
+        $variationsDao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
         $dao = $this->createMock(ProductAttributesDao::class);
         $db = $this->createMock(DbAdapterInterface::class);
         
-        $service = new VariationService($dao, $db);
+        $service = new VariationService($variationsDao, $dao, $db);
         
         $categories = [
             [
@@ -52,10 +55,11 @@ class VariationServiceTest extends TestCase
 
     public function testGenerateCombinationsTwoCategories(): void
     {
+        $variationsDao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
         $dao = $this->createMock(ProductAttributesDao::class);
         $db = $this->createMock(DbAdapterInterface::class);
         
-        $service = new VariationService($dao, $db);
+        $service = new VariationService($variationsDao, $dao, $db);
         
         $categories = [
             [
@@ -104,10 +108,11 @@ class VariationServiceTest extends TestCase
 
     public function testGenerateCombinationsSingleValueCategories(): void
     {
+        $variationsDao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
         $dao = $this->createMock(ProductAttributesDao::class);
         $db = $this->createMock(DbAdapterInterface::class);
         
-        $service = new VariationService($dao, $db);
+        $service = new VariationService($variationsDao, $dao, $db);
         
         $categories = [
             [
@@ -142,10 +147,11 @@ class VariationServiceTest extends TestCase
 
     public function testGenerateCombinationsEmptyCategoryValues(): void
     {
+        $variationsDao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
         $dao = $this->createMock(ProductAttributesDao::class);
         $db = $this->createMock(DbAdapterInterface::class);
         
-        $service = new VariationService($dao, $db);
+        $service = new VariationService($variationsDao, $dao, $db);
         
         $categories = [
             [
@@ -163,10 +169,11 @@ class VariationServiceTest extends TestCase
 
     public function testGenerateVariationStockId(): void
     {
+        $variationsDao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
         $dao = $this->createMock(ProductAttributesDao::class);
         $db = $this->createMock(DbAdapterInterface::class);
         
-        $service = new VariationService($dao, $db);
+        $service = new VariationService($variationsDao, $dao, $db);
         
         $combination = [
             ['slug' => 's', 'category_code' => 'size'],
@@ -180,10 +187,11 @@ class VariationServiceTest extends TestCase
 
     public function testGenerateVariationStockIdSingleAttribute(): void
     {
+        $variationsDao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
         $dao = $this->createMock(ProductAttributesDao::class);
         $db = $this->createMock(DbAdapterInterface::class);
         
-        $service = new VariationService($dao, $db);
+        $service = new VariationService($variationsDao, $dao, $db);
         
         $combination = [
             ['slug' => 'large', 'category_code' => 'size']
@@ -196,10 +204,11 @@ class VariationServiceTest extends TestCase
 
     public function testGenerateVariationStockIdEmptyCombination(): void
     {
+        $variationsDao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
         $dao = $this->createMock(ProductAttributesDao::class);
         $db = $this->createMock(DbAdapterInterface::class);
         
-        $service = new VariationService($dao, $db);
+        $service = new VariationService($variationsDao, $dao, $db);
         
         $combination = []; // Empty combination
         
@@ -210,6 +219,7 @@ class VariationServiceTest extends TestCase
 
     public function testGenerateVariationDescription(): void
     {
+        $variationsDao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
         $dao = $this->createMock(ProductAttributesDao::class);
         $db = $this->createMock(DbAdapterInterface::class);
 
@@ -222,7 +232,7 @@ class VariationServiceTest extends TestCase
             ->with('SELECT description FROM `fa_stock_master` WHERE stock_id = :stock_id', ['stock_id' => 'ABC123'])
             ->willReturn([['description' => 'Product ABC123 - ${SIZE} ${COLOR}']]);
 
-        $service = new VariationService($dao, $db);
+        $service = new VariationService($variationsDao, $dao, $db);
         
         $combination = [
             ['value' => 'Small', 'category_code' => 'size'],
@@ -236,6 +246,7 @@ class VariationServiceTest extends TestCase
 
     public function testGenerateVariations(): void
     {
+        $variationsDao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
         $dao = $this->createMock(ProductAttributesDao::class);
         $db = $this->createMock(DbAdapterInterface::class);
         
@@ -248,7 +259,7 @@ class VariationServiceTest extends TestCase
             ->with('SELECT description FROM `fa_stock_master` WHERE stock_id = :stock_id', ['stock_id' => 'ABC123'])
             ->willReturn([['description' => 'Product ABC123 - ${SIZE} ${COLOR}']]);
         
-        $dao->expects($this->once())
+        $variationsDao->expects($this->once())
             ->method('listAssignments')
             ->with('ABC123')
             ->willReturn([
@@ -280,8 +291,8 @@ class VariationServiceTest extends TestCase
                     'value_slug' => 'red'
                 ]
             ]);
-        
-        $service = new VariationService($dao, $db);
+
+        $service = new VariationService($variationsDao, $dao, $db);
         $variations = $service->generateVariations('ABC123');
         
         $this->assertCount(2, $variations);

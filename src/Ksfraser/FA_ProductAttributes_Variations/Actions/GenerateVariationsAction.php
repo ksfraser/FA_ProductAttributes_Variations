@@ -3,7 +3,7 @@
 namespace Ksfraser\FA_ProductAttributes_Variations\Actions;
 
 use Ksfraser\FA_ProductAttributes\Dao\ProductAttributesDao;
-use Ksfraser\FA_ProductAttributes\Db\DbAdapterInterface;
+use Ksfraser\ModulesDAO\Db\DbAdapterInterface;
 use Ksfraser\FA_ProductAttributes_Variations\UI\RoyalOrderHelper;
 
 class GenerateVariationsAction

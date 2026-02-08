@@ -4,8 +4,9 @@ namespace Ksfraser\FA_ProductAttributes_Variations\Test\Actions;
 
 use PHPUnit\Framework\TestCase;
 use Ksfraser\FA_ProductAttributes\Dao\ProductAttributesDao;
+use Ksfraser\FA_ProductAttributes_Variations\Dao\VariationsDao;
 use Ksfraser\FA_ProductAttributes_Variations\Actions\CreateChildAction;
-use Ksfraser\FA_ProductAttributes\Db\DbAdapterInterface;
+use Ksfraser\ModulesDAO\Db\DbAdapterInterface;
 
 class CreateChildActionTest extends TestCase
 {
@@ -17,7 +18,7 @@ class CreateChildActionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dao = $this->createMock(ProductAttributesDao::class);
+        $this->dao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
         $this->action = new CreateChildAction($this->dao);
     }
 

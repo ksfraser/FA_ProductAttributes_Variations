@@ -4,7 +4,7 @@ namespace Ksfraser\FA_ProductAttributes_Variations\Test\Actions;
 
 use Ksfraser\FA_ProductAttributes_Variations\Actions\GenerateVariationsAction;
 use Ksfraser\FA_ProductAttributes\Dao\ProductAttributesDao;
-use Ksfraser\FA_ProductAttributes\Db\DbAdapterInterface;
+use Ksfraser\ModulesDAO\Db\DbAdapterInterface;
 use PHPUnit\Framework\TestCase;
 
 class GenerateVariationsActionTest extends TestCase

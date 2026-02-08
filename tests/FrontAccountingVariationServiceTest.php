@@ -4,14 +4,16 @@ namespace Ksfraser\FA_ProductAttributes_Variations\Test\Service;
 
 use Ksfraser\FA_ProductAttributes_Variations\Service\FrontAccountingVariationService;
 use Ksfraser\FA_ProductAttributes\Dao\ProductAttributesDao;
-use Ksfraser\FA_ProductAttributes\Db\DbAdapterInterface;
+use Ksfraser\FA_ProductAttributes_Variations\Dao\VariationsDao;
+use Ksfraser\ModulesDAO\Db\DbAdapterInterface;
 use PHPUnit\Framework\TestCase;
 
 class FrontAccountingVariationServiceTest extends TestCase
 {
     public function testCreateVariations(): void
     {
-        $dao = $this->createMock(ProductAttributesDao::class);
+        $dao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
+        $coreDao = $this->createMock(ProductAttributesDao::class);
         $attributesDb = $this->createMock(DbAdapterInterface::class);
         $faDb = $this->createMock(DbAdapterInterface::class);
 
@@ -82,7 +84,7 @@ class FrontAccountingVariationServiceTest extends TestCase
                 })
             );
 
-        $service = new FrontAccountingVariationService($dao, $attributesDb, $faDb);
+        $service = new FrontAccountingVariationService($dao, $coreDao, $attributesDb, $faDb);
         $created = $service->createVariations('ABC123', false);
 
         $this->assertEquals(['ABC123-S-RED'], $created);
@@ -90,7 +92,8 @@ class FrontAccountingVariationServiceTest extends TestCase
 
     public function testCreateVariationsWithPricing(): void
     {
-        $dao = $this->createMock(ProductAttributesDao::class);
+        $dao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
+        $coreDao = $this->createMock(ProductAttributesDao::class);
         $attributesDb = $this->createMock(DbAdapterInterface::class);
         $faDb = $this->createMock(DbAdapterInterface::class);
 
@@ -159,7 +162,7 @@ class FrontAccountingVariationServiceTest extends TestCase
                 ]
             );
 
-        $service = new FrontAccountingVariationService($dao, $attributesDb, $faDb);
+        $service = new FrontAccountingVariationService($dao, $coreDao, $attributesDb, $faDb);
         $created = $service->createVariations('ABC123', true);
 
         $this->assertEquals(['ABC123-S'], $created);
@@ -167,7 +170,8 @@ class FrontAccountingVariationServiceTest extends TestCase
 
     public function testCreateVariationsNoAssignments(): void
     {
-        $dao = $this->createMock(ProductAttributesDao::class);
+        $dao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
+        $coreDao = $this->createMock(ProductAttributesDao::class);
         $attributesDb = $this->createMock(DbAdapterInterface::class);
         $faDb = $this->createMock(DbAdapterInterface::class);
 
@@ -177,7 +181,7 @@ class FrontAccountingVariationServiceTest extends TestCase
             ->with('ABC123')
             ->willReturn([]);
 
-        $service = new FrontAccountingVariationService($dao, $attributesDb, $faDb);
+        $service = new FrontAccountingVariationService($dao, $coreDao, $attributesDb, $faDb);
         $created = $service->createVariations('ABC123', false);
 
         $this->assertEquals([], $created); // Should return empty array when no assignments
@@ -185,7 +189,8 @@ class FrontAccountingVariationServiceTest extends TestCase
 
     public function testCreateVariationsDatabaseError(): void
     {
-        $dao = $this->createMock(ProductAttributesDao::class);
+        $dao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
+        $coreDao = $this->createMock(ProductAttributesDao::class);
         $attributesDb = $this->createMock(DbAdapterInterface::class);
         $faDb = $this->createMock(DbAdapterInterface::class);
 
@@ -211,7 +216,7 @@ class FrontAccountingVariationServiceTest extends TestCase
             ->method('query')
             ->willThrowException(new \Exception('Database connection failed'));
 
-        $service = new FrontAccountingVariationService($dao, $attributesDb, $faDb);
+        $service = new FrontAccountingVariationService($dao, $coreDao, $attributesDb, $faDb);
         
         $this->expectException(\Exception::class);
         $service->createVariations('ABC123', false);
@@ -219,7 +224,8 @@ class FrontAccountingVariationServiceTest extends TestCase
 
     public function testGetParentDescriptionNotFound(): void
     {
-        $dao = $this->createMock(ProductAttributesDao::class);
+        $dao = $this->getMockBuilder(VariationsDao::class)->disableOriginalConstructor()->getMock();
+        $coreDao = $this->createMock(ProductAttributesDao::class);
         $attributesDb = $this->createMock(DbAdapterInterface::class);
         $faDb = $this->createMock(DbAdapterInterface::class);
 
@@ -229,7 +235,7 @@ class FrontAccountingVariationServiceTest extends TestCase
             ->with('SELECT description FROM `fa_stock_master` WHERE stock_id = :stock_id', ['stock_id' => 'NONEXISTENT'])
             ->willReturn([]); // No results
 
-        $service = new FrontAccountingVariationService($dao, $attributesDb, $faDb);
+        $service = new FrontAccountingVariationService($dao, $coreDao, $attributesDb, $faDb);
         $description = $this->invokePrivateMethod($service, 'getParentDescription', ['NONEXISTENT']);
 
         $this->assertEquals('', $description); // Should return empty string when not found

@@ -3,26 +3,34 @@
     "description": "Product Variations plugin for FA_ProductAttributes",
     "type": "library",
     "license": "MIT",
-    "authors": [
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
         {
-            "name": "Kevin Fraser",
-            "email": "kevin@ksfraser.com"
+            "type": "path",
+            "url": "../"
+        },
+        {
+            "type": "path",
+            "url": "../famock"
         }
     ],
     "require": {
-        "php": ">=7.3"
+        "php": ">=7.3",
+        "ksfraser/fa-product-attributes": "*",
+        "ksfraser/famock": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.0"
     },
     "autoload": {
         "psr-4": {
-            "Ksfraser\\FA_ProductAttributes_Variations\\": "src/"
+            "Ksfraser\\FA_ProductAttributes_Variations\\": "src/Ksfraser/FA_ProductAttributes_Variations/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Ksfraser\\FA_ProductAttributes_Variations\\Tests\\": "tests/"
+            "Ksfraser\\FA_ProductAttributes_Variations\\Test\\": "tests/"
         }
     },
     "scripts": {

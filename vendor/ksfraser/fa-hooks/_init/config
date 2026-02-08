@@ -1,0 +1,15 @@
+<?php
+
+// FA-Hooks Module Configuration
+// Package definition for FrontAccounting module system
+
+Package: fa-hooks
+Name: FA Hooks
+Description: Generic hook system for FrontAccounting module extensions
+Author: Kevin Fraser <kevin@ksfraser.com>
+Maintenance: Kevin Fraser <kevin@ksfraser.com>
+Homepage: http://ksfraser.com
+Type: extension
+InstallPath: modules/fa-hooks
+Filename: fa-hooks
+Version: 1.0.0

@@ -2,20 +2,20 @@
 
 ## Overview
 
-This document provides comprehensive User Acceptance Testing scenarios for the FA_ProductAttributes_Variations plugin, which extends the core FA_ProductAttributes module with WooCommerce-style product variations functionality.
+This document provides comprehensive User Acceptance Testing scenarios for the FA_ProductAttributes_Variations plugin, which provides WooCommerce-style product variations functionality. The plugin enables parent-child product relationships with automatic variation generation based on attribute combinations.
 
-## Plugin Testing Scope
+## Variations Plugin Testing Scope
 
-**Included in Variations Plugin UAT:**
-- Product variation generation and management
-- Parent-child relationship handling
-- Retroactive pattern analysis
-- Variation UI extensions
-- Royal Order attribute sequencing
+**Included in Variations UAT:**
+- Parent product definition and variation generation
+- Variation-specific stock and pricing management
+- Bulk operations for variation management
+- Retroactive pattern analysis for existing products
+- Integration with FA's sales and inventory systems
 
 **Dependencies:**
-- FA_ProductAttributes core module must be installed and tested first
-- Attribute categories and values must be available from core module
+- FA_ProductAttributes_Core module must be installed and active
+- Test products with assigned attributes (Size, Color, etc.)
 
 ## Test Case Structure
 
@@ -23,7 +23,7 @@ Each test case includes:
 - **Test Case ID**: Unique identifier (prefixed with VAR-)
 - **Title**: Descriptive test name
 - **Priority**: Critical, High, Medium, Low
-- **Preconditions**: Required setup (including core module)
+- **Preconditions**: Required setup
 - **Test Steps**: Step-by-step instructions
 - **Expected Results**: What should happen
 - **Pass/Fail Criteria**: How to determine success
@@ -34,14 +34,14 @@ Each test case includes:
 
 ### Prerequisites
 - FrontAccounting 2.3.22 installed and running
-- FA_ProductAttributes core module activated and tested
-- FA_ProductAttributes_Variations plugin activated
+- FA_ProductAttributes core module activated
 - Test user with admin permissions
-- Sample inventory data with attributes assigned
+- Sample inventory data created
 - Browser: Chrome/Firefox latest versions
+- **Note**: Plugins should be tested separately after core validation
 
 ### Test Data Setup
-Assuming core module test data exists, create additional variation-specific data:
+Run the following SQL to create test data:
 ```sql
 -- Insert test categories
 INSERT INTO product_attribute_categories (code, label, description, sort_order, active) VALUES
@@ -587,6 +587,122 @@ INSERT INTO stock_master (stock_id, description, category_id, taxable, mb_flag, 
 **Pass/Fail Criteria**:
 - PASS: Operations complete within acceptable time limits
 - FAIL: Slow loading or timeouts
+
+---
+
+## Categories Plugin Test Cases
+
+### TC-UAT-CAT-001: Create Product Category Hierarchy
+**Priority**: Critical  
+**Preconditions**: Admin user logged in, Categories plugin active  
+
+**Test Steps**:
+1. Navigate to Inventory → Stock → Product Categories
+2. Click "Add Category" button
+3. Enter "Electronics" as category name
+4. Leave parent category empty (top-level)
+5. Click "Create Category"
+6. Create subcategory "Smartphones" under "Electronics"
+7. Create subcategory "Laptops" under "Electronics"
+
+**Expected Results**:
+- Top-level "Electronics" category created
+- "Smartphones" and "Laptops" appear as subcategories
+- Hierarchical tree displays correctly
+
+**Pass/Fail Criteria**:
+- PASS: Category hierarchy created and displayed properly
+- FAIL: Hierarchy not maintained or display issues
+
+**Test Data**: Electronics > Smartphones, Electronics > Laptops
+
+---
+
+### TC-UAT-CAT-002: Assign Product to Categories
+**Priority**: Critical  
+**Preconditions**: Product exists, categories created, Categories plugin active  
+
+**Test Steps**:
+1. Navigate to Inventory → Items and select a product
+2. Click "Product Categories" TAB
+3. Expand category tree and select "Electronics > Smartphones"
+4. Also select "Electronics > Laptops"
+5. Click "Save Categories"
+
+**Expected Results**:
+- Success message: "Categories assigned successfully"
+- Product shows assigned categories in details
+- Categories appear in product listings
+
+**Pass/Fail Criteria**:
+- PASS: Product assigned to multiple categories
+- FAIL: Assignment fails or not saved
+
+**Test Data**: Product: TEST-PHONE, Categories: Smartphones, Laptops
+
+---
+
+### TC-UAT-CAT-003: Filter Products by Category
+**Priority**: High  
+**Preconditions**: Products assigned to categories, Categories plugin active  
+
+**Test Steps**:
+1. Navigate to Inventory → Items
+2. Click category filter dropdown
+3. Select "Electronics" category
+4. Check "Include subcategories"
+5. Apply filter
+
+**Expected Results**:
+- Product list shows only items in Electronics category
+- Subcategories (Smartphones, Laptops) included
+- Filter can be cleared
+
+**Pass/Fail Criteria**:
+- PASS: Correct products displayed based on category filter
+- FAIL: Wrong products shown or filter not working
+
+---
+
+### TC-UAT-CAT-004: Bulk Category Assignment
+**Priority**: Medium  
+**Preconditions**: Multiple products exist, categories created  
+
+**Test Steps**:
+1. Navigate to Inventory → Stock → Product Categories
+2. Click "Bulk Assign" button
+3. Select multiple products from list
+4. Choose "Electronics > Smartphones" category
+5. Click "Assign to Selected"
+
+**Expected Results**:
+- Success message with count of assignments
+- All selected products assigned to category
+- Assignments visible in individual product details
+
+**Pass/Fail Criteria**:
+- PASS: Bulk assignment completes successfully
+- FAIL: Partial failures or errors
+
+---
+
+### TC-UAT-CAT-005: Category-Based Reporting
+**Priority**: Medium  
+**Preconditions**: Products assigned to categories, reporting enabled  
+
+**Test Steps**:
+1. Navigate to Reports → Inventory → Category Report
+2. Select "Electronics" from category filter
+3. Generate report
+
+**Expected Results**:
+- Report shows products grouped by category
+- Subtotals for each category level
+- Export options available
+
+**Pass/Fail Criteria**:
+- PASS: Report generates with correct category groupings
+- FAIL: Incorrect groupings or missing data
 
 ---
 

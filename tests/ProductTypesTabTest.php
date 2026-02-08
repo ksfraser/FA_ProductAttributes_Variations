@@ -16,7 +16,7 @@ class ProductTypesTabTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dao = $this->createMock(ProductAttributesDao::class);
+        $this->dao = $this->getMockBuilder(ProductAttributesDao::class)->disableOriginalConstructor()->onlyMethods(['getAllProducts', 'listCategoryAssignments'])->addMethods(['getProductParent'])->getMock();
         $this->tab = new ProductTypesTab($this->dao);
     }
 

@@ -1,101 +1,76 @@
 # Use Case Document - FA_ProductAttributes_Variations Plugin
 
 ## Overview
-This document describes use cases specific to the FA_ProductAttributes_Variations plugin, which extends the core FA_ProductAttributes module with WooCommerce-style product variations functionality.
+This document describes use cases for the FA_ProductAttributes_Variations plugin, which provides WooCommerce-style product variations functionality. The plugin enables parent-child product relationships where variations are automatically generated based on attribute combinations.
 
-## Plugin Dependencies
-- FA_ProductAttributes core module must be installed and active
-- Attribute categories and values must be defined in core module
-- Products must have attributes assigned through core functionality
+## Variations Plugin Responsibilities
+- Parent product definition and variation generation
+- Variation-specific stock and pricing management
+- Bulk operations for variation management
+- Retroactive pattern analysis for existing products
+- Integration with FA's sales and inventory systems
 
-## Use Case: Create Product Variations for New Product Line
+## Use Case: Create Product Variations
 
 ### Actors
 - Product Manager (Primary Actor)
+- Inventory Manager (Supporting Actor)
 
 ### Preconditions
+- FA_ProductAttributes_Core module is installed and active
 - FA_ProductAttributes_Variations plugin is installed and active
-- Master product exists in FA with attributes assigned via core module
-- Product is designated as a parent/variable product
+- Product has attributes assigned (e.g., Size: Small/Medium/Large, Color: Red/Blue)
 
 ### Main Flow
-1. Product Manager navigates to Inventory > Items and selects the master product.
-2. On the "Product Attributes" TAB (extended by plugin), views assigned attributes.
-3. Clicks "Create Variations" button to generate all possible combinations.
-4. System uses VariationService to generate combinations using Royal Order sequencing.
-5. FrontAccountingVariationService creates child products in FA database.
-6. Each variation gets unique stock_id (parent + attribute abbreviations).
-7. Description templates are applied with attribute value substitution.
-8. Pricing is optionally copied from parent to variations.
-9. System confirms creation and displays generated variations table.
-
-### Postconditions
-- Child variation products are created and linked to parent.
-- Parent-child relationships are established in database.
-- Variations are available as individual products in FA inventory.
+1. Product Manager navigates to product editing interface
+2. Selects "Create Variations" option for the product
+3. System generates all possible attribute combinations (Small-Red, Small-Blue, Medium-Red, etc.)
+4. Manager reviews and modifies generated variations as needed
+5. Sets variation-specific pricing rules and stock levels
+6. Saves variations and updates parent product status
 
 ### Alternative Flows
-- Selective generation: Choose specific combinations instead of all possible.
-- Template customization: Modify description templates before generation.
-- Pricing options: Copy pricing, set custom pricing, or no pricing.
-
-## Use Case: Retroactive Pattern Analysis
-
-### Actors
-- System Administrator (Primary Actor)
-
-### Preconditions
-- Existing products in FA inventory with potential variation patterns
-- FA_ProductAttributes_Variations plugin active
-- Attribute categories defined in core module
-
-### Main Flow
-1. Administrator accesses retroactive analysis functionality.
-2. RetroactiveApplicationService scans all stock_ids for variation patterns.
-3. System identifies potential parent-child relationships based on naming patterns.
-4. Analyzes attribute consistency across potential variation groups.
-5. Calculates confidence scores for each suggested relationship.
-6. Presents suggestions with confidence levels and proposed attribute assignments.
-7. Administrator reviews and approves suggestions.
-8. System applies approved relationships and creates attribute assignments.
+- **Manual Variation Creation**: Manager creates specific variations instead of auto-generating all combinations
+- **Bulk Variation Operations**: Manager applies changes to multiple variations simultaneously
 
 ### Postconditions
-- Existing products are organized into parent-child variation relationships.
-- Attribute assignments are created based on pattern analysis.
-- Product catalog is retroactively structured for variations.
+- Parent product has associated variation products
+- Each variation has unique SKU, pricing, and stock levels
+- Variations are available for sales and inventory management
+- Royal Order ensures consistent attribute display across the system.
 
 ### Alternative Flows
-- Manual review: Administrator can modify suggested relationships.
-- Partial application: Apply only high-confidence suggestions.
-- Category matching: System attempts to match patterns to existing attribute categories.
+- Edit existing category: Update name, Royal Order, or values.
+- Delete category: Confirm no products are using it, then remove.
+- Bulk operations: Import/export attribute structures.
 
-## Use Case: Manage Variation Product Relationships
+## Use Case: Assign Attributes to Products (Core Functionality)
 
 ### Actors
 - Product Manager (Primary Actor)
 
 ### Preconditions
-- Variation products exist with parent-child relationships
-- Plugin is active and relationships are established
+- Product Manager has access to FrontAccounting Items screen.
+- FA_ProductAttributes core module is installed.
+- Attribute categories and values exist in the system.
 
 ### Main Flow
-1. Product Manager selects a parent product in Items screen.
-2. Views extended attributes tab showing variation management options.
-3. Sees table of all child variations with their attributes and status.
-4. Can activate/deactivate individual variations or entire families.
-5. Can create missing variations if new attributes are added.
-6. Can reassign variations to different parents if needed.
-7. Can view and edit variation-specific properties.
+1. Product Manager navigates to Inventory > Items and selects a product.
+2. Clicks on "Product Attributes" TAB (provided by core module).
+3. Views current attribute assignments for the product.
+4. Adds attribute categories to the product.
+5. Selects specific values for each assigned category.
+6. Saves attribute assignments.
+7. Views "Variations" column showing combinatorial possibilities.
 
 ### Postconditions
-- Variation relationships are maintained and up-to-date.
-- Product catalog reflects current variation structure.
-- Individual variations can be managed independently.
+- Product has attributes assigned and available for plugin extensions.
+- Attribute data is stored and can be retrieved by plugins.
 
 ### Alternative Flows
-- Bulk operations: Activate/deactivate multiple variations at once.
-- Relationship changes: Move variations between parent products.
-- Status monitoring: View stock levels and sales data for variations.
+- Remove assignments: Unassign categories or specific values.
+- Category-level assignment: Assign entire category to product.
+- Individual assignment: Assign specific values within categories.
 
 ## Use Case: Add New Attribute to Existing Product Line and Generate Variations
 
@@ -347,6 +322,81 @@ This document describes use cases specific to the FA_ProductAttributes_Variation
 ### Business Rules
 - Patterns based on attribute abbreviations and Royal Order sequencing.
 - Sanity checks warn on root mismatches but allow force assignment.
+
+## Use Case: Create and Manage Product Categories
+
+### Actors
+- Product Manager (Primary Actor)
+
+### Preconditions
+- Product Manager has access to FrontAccounting.
+- FA_ProductAttributes_Categories plugin is installed and active.
+
+### Main Flow
+1. Product Manager navigates to Inventory > Stock > Product Categories.
+2. Views hierarchical category tree.
+3. Creates new top-level category (e.g., "Clothing").
+4. Creates subcategories under parent categories (e.g., "Shirts" under "Clothing").
+5. Sets category properties (name, description, sort order).
+6. Activates or deactivates categories as needed.
+
+### Postconditions
+- Category hierarchy is established and available for product assignments.
+
+### Alternative Flows
+- Edit existing category: Update properties or move in hierarchy.
+- Delete category: Confirm no products assigned, then remove.
+- Bulk operations: Import/export category structures.
+
+## Use Case: Assign Products to Categories
+
+### Actors
+- Product Manager (Primary Actor)
+
+### Preconditions
+- Product Manager has access to FrontAccounting Items screen.
+- FA_ProductAttributes_Categories plugin is installed.
+- Product categories exist in the system.
+
+### Main Flow
+1. Product Manager navigates to Inventory > Items and selects a product.
+2. Clicks on "Product Categories" TAB (provided by categories plugin).
+3. Views available categories in hierarchical tree.
+4. Selects one or multiple categories for the product.
+5. Saves category assignments.
+6. Views assigned categories in product details.
+
+### Postconditions
+- Product is linked to selected categories.
+- Category data is available for filtering and reporting.
+
+### Alternative Flows
+- Remove assignments: Unassign categories from product.
+- Bulk assignment: Assign multiple products to categories simultaneously.
+
+## Use Case: Filter Products by Category
+
+### Actors
+- Product Manager (Primary Actor)
+- Sales Representative (Secondary Actor)
+
+### Preconditions
+- Products are assigned to categories.
+- FA_ProductAttributes_Categories plugin is active.
+
+### Main Flow
+1. User navigates to product listing or search screen.
+2. Selects category filter from hierarchical tree.
+3. Chooses to include or exclude subcategories.
+4. Applies filter to view products in selected categories.
+5. Refines filter with additional criteria.
+
+### Postconditions
+- Product list shows only items in selected categories.
+
+### Alternative Flows
+- Multiple category selection: Combine categories with AND/OR logic.
+- Save filter: Store filter preferences for future use.
 
 ## Use Case: Manage Attribute Categories and Values (Admin)
 
